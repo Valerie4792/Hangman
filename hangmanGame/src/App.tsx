@@ -16,13 +16,48 @@ function App() {
 
   //need to store letters that have guessed. will need a useState
   const [guessedLtr, setGuessedLtr] = useState<string[]>([]);
+  const wrongGuess = guessedLtr.filter( ltr => !wordGuessing.includes(ltr))
+
+
+  // const btnClicked = false;
+
+//need to add logic to turn letter inactive
+  const BtnLetterClicked = () =>{
+    
+   
+
+  }
 
   return (
-    <div className="App d-flex">
-      <div className='text-center winlose'> Lose win</div>
-      <HangmanDisplayPic/>
-      <HangmanWordSpace/>
-      <Alphabet/>
+    <div className="App">
+      <div className="row justify-content-center winlose">
+      <h2> Lose win</h2>
+      </div>
+
+    <div className="row">
+      <div className="col">
+        <HangmanDisplayPic tries={wrongGuess.length}/>
+{/* will need to add logic to change background pic depending on number of guesses wrong */}
+      </div>
+    </div>
+    <div className="row">
+      <div className="col">
+        <HangmanWordSpace/>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col" style={{alignSelf:'stretch'}}>
+
+        <Alphabet onBtnClick={BtnLetterClicked}/>
+      </div>
+    </div>
+
+      
+
+      
+      
+      
+     
      
 
     </div>

@@ -6,3 +6,25 @@
   /* need logic to change background image */
 
 }
+.bottomLetterBorder{
+  border-bottom: .1em solid black;
+
+}
+.wordDisplayStyle{
+  display: flex;
+  gap: .25em;
+  font-size: 6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-family: Arial;
+}
+.alphabetKeys{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  gap: .5rem;
+}
+/* .inactive{
+  opacity: 0.4;
+
+} */
+

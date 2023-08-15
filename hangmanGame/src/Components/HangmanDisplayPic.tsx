@@ -1,14 +1,17 @@
-import React from 'react'
+import React from "react";
 
-const HangmanDisplayPic = () => {
 
-    const word = 'test'
-  return (
-    <div className='picOfHangman'>
-        {word.split("").map((letter, index)=> <span>{letter}</span>)}
-      
-    </div>
-  )
+
+interface HangmanPicProps {
+    tries: number
 }
+const HangmanDisplayPic = ({tries}: HangmanPicProps) => {
+  
+  return (
+    <div>
+   
+    </div>
+  );
+};
 
-export default HangmanDisplayPic
+export default HangmanDisplayPic;
