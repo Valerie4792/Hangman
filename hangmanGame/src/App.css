@@ -1,5 +1,7 @@
 
-.body{
+body{
+  background-image: url('../src/assets/Beginning.png');
+  background-size: cover;
   
 }
 .picOfHangman{
@@ -27,4 +29,20 @@
   opacity: 0.4;
 
 } */
+/* Remove any conflicting Bootstrap classes */
+/* ... */
+
+/* Update the .alphabetLtrs styles */
+.alphabetLtrs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 6 columns */
+  gap: 0.1rem; /* Adjust the gap between buttons as needed */
+  justify-content: center;
+  align-items: flex-end;
+  padding: 20px 0px; /* Adjust padding to control spacing */
+  position: absolute; /* Position at the bottom */
+  bottom: 0; /* Align to the bottom of the container */
+  width: 100%; /* Take the full width of the container */
+}
+
 

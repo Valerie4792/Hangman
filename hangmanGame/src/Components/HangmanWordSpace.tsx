@@ -1,19 +1,23 @@
 import React from "react";
 
-const HangmanWordSpace = () => {
-  const word = "TEST";
-  const guessedLtrs = ["t", "a", "b"];
+interface wordProps{
+    guessedLtr: string[]
+    wordGuessing: string
+}
+
+const HangmanWordSpace = ({guessedLtr, wordGuessing}: wordProps) => {
+ 
   return (
     <div className="wordDisplayStyle">
-      {word.split("").map((letter, index) => (
+      {wordGuessing.split("").map((ltr, index) => (
         <span className="bottomLetterBorder" key={index}>
           <span
             className="d-flex justify-content-center"
             style={{
-              visibility: guessedLtrs.includes(letter) ? "visible" : "hidden",
+              visibility: guessedLtr.includes(ltr) ? "visible" : "hidden",
             }}
           >
-            {letter}
+            {ltr}
           </span>
         </span>
       ))}
