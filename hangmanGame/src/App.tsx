@@ -1,77 +1,140 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import words from './wordList.json'
-import HangmanDisplayPic from './Components/HangmanDisplayPic'
-import HangmanWordSpace from './Components/HangmanWordSpace'
-import Alphabet from './Components/Alphabet'
-import  { hangmanBGImages } from './Components/HangmanDisplayPic';
-//imported json file
+import React, { useEffect, useRef, useState } from "react";
+import "./App.css";
+import words from "./wordList.json";
+import HangmanDisplayPic from "./Components/HangmanDisplayPic";
+import HangmanWordSpace from "./Components/HangmanWordSpace";
+import Alphabet from "./Components/Alphabet";
+import { hangmanBGImages } from "./Components/HangmanDisplayPic";
+import pauseButtonImage from "./assets/pauseImage.png";
+import playButtonImage from "./assets/playImage.png";
 
 function App() {
- 
-  const [wordGuessing, setwordGuessing] = useState(()=>{
-    //this will give a random word from our json file of words List
-    return words[Math.floor(Math.random() * words.length)]
- 
-  })
+  const [wordGuessing, setWordGuessing] = useState(() => {
+    return words[Math.floor(Math.random() * words.length)];
+  });
 
-  //need to store letters that have guessed. will need a useState
   const [guessedLtr, setGuessedLtr] = useState<string[]>([]);
-  const wrongGuess = guessedLtr.filter( ltr => !wordGuessing.includes(ltr))
-  const maxWrongGuesses = hangmanBGImages.length - 1; // Maximum number of incorrect guesses before using the last image
+  const [sound, setSound] = useState(50); // Initial volume state
+  const [isAutoplay, setIsAutoplay] = useState(true);
+  const wrongGuess = guessedLtr.filter((ltr) => !wordGuessing.includes(ltr));
+  const maxWrongGuesses = hangmanBGImages.length - 1;
   const backgroundIndex = Math.min(wrongGuess.length, maxWrongGuesses);
 
+  const loser = wrongGuess.length >= 6;
+  const winner = wordGuessing
+    .split("")
+    .every((ltr) => guessedLtr.includes(ltr));
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     document.body.style.backgroundImage = `url(${hangmanBGImages[backgroundIndex]})`;
     return () => {
-     
-      document.body.style.backgroundImage = '';
+      document.body.style.backgroundImage = "";
     };
   }, [backgroundIndex]);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = sound / 100; // Convert range 1-100 to 0-1
+      if (isAutoplay) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [sound, isAutoplay]);
 
+  const handlePlayPause = () => {
+    setIsAutoplay(!isAutoplay);
+  };
 
- 
-
-//need to add logic to turn letter inactive after clicked
-  const BtnLetterClicked = (letter: string) =>{
+  const BtnLetterClicked = (letter: string) => {
     setGuessedLtr((prevGuessedLtr) => [...prevGuessedLtr, letter]);
-  }
+  };
 
   return (
     <div className="App">
-      <div className="row justify-content-center winlose">
-      <h2> Lose win</h2>
+      {/* for audio element/play/pause sound */}
+      <audio ref={audioRef} autoPlay={isAutoplay} loop src="/audio/JPT.mp3" />
+
+      <div onClick={handlePlayPause} className="play-pause-button">
+        <img
+          className="playPauseImageSize mx-4 my-2"
+          src={isAutoplay ? pauseButtonImage : playButtonImage}
+          alt={isAutoplay ? "Pause" : "Play"}
+        />
+      </div>
+      <input
+        type="range"
+        min="1"
+        max="100"
+        value={sound}
+        className="slider mx-3"
+        id="myRange"
+        onChange={(e) => setSound(Number(e.target.value))}
+      />
+      <p className="volume mx-3">Volume: {sound}</p>
+      
+      <div className="row winlose">
+
+        <h2 className="displayTitle my-5 text-center">
+          {winner ? (
+            <>
+              You Won! The Dino has survived extinction! {" "}
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => window.location.reload()}
+                  >
+                    Play Again?
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : loser ? (
+            <>
+              You Lose! The dino has gone extinct{" "}
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => window.location.reload()}
+                  >
+                    Play Again?
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            "Guess the word!"
+          )}
+        </h2>
       </div>
 
-    <div className="row">
-      <div className="col">
-        <HangmanDisplayPic tries={wrongGuess.length}/>
-{/* will need to add logic to change background pic depending on number of guesses wrong */}
+      <div className="row">
+        <div className="col">
+          <HangmanDisplayPic tries={wrongGuess.length} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <HangmanWordSpace
+            guessedLtr={guessedLtr}
+            wordGuessing={wordGuessing}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="alphabetLtrs">
+          <Alphabet
+            disabled={winner || loser}
+            onBtnClick={BtnLetterClicked}
+            guessedLtr={guessedLtr}
+          />
+        </div>
       </div>
     </div>
-    <div className="row">
-      <div className="col">
-        <HangmanWordSpace guessedLtr={guessedLtr} wordGuessing={wordGuessing}/>
-      </div>
-    </div>
-    <div>
-      <div className="alphabetLtrs">
-
-        <Alphabet onBtnClick={BtnLetterClicked} guessedLtr ={guessedLtr}/>
-      </div>
-    </div>
-
-      
-
-      
-      
-      
-     
-     
-
-    </div>
-  )
+  );
 }
 
-export default App
+export default App;

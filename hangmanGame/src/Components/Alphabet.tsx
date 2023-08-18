@@ -1,8 +1,9 @@
 import React from 'react'
 
-interface btnClickedProps{
+export interface btnClickedProps{
     onBtnClick: (letter:string) => void
     guessedLtr: string[]
+    disabled: boolean;
 }
 const alphabetLetters = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
@@ -12,8 +13,9 @@ const alphabetLetters = [
 
   
 
-const Alphabet = ({onBtnClick, guessedLtr}:btnClickedProps) => {
+const Alphabet = ({onBtnClick, guessedLtr, disabled}:btnClickedProps) => {
 
+   
   return (
     <div className='alphabetKeys'>
         {alphabetLetters.map(alphabetLtrs => {
@@ -24,9 +26,9 @@ const Alphabet = ({onBtnClick, guessedLtr}:btnClickedProps) => {
                 <button
                 type="button"
                 className={`btn btn-dark my-2 ${isActive ? 'inactive' : ''}`}
-                onClick={() => isActive && onBtnClick(alphabetLtrs)}
+                onClick={() => !disabled && isActive && onBtnClick(alphabetLtrs)}
                 key={alphabetLtrs}
-                disabled={!isActive}
+                disabled={!isActive || disabled}
               >{alphabetLtrs}</button>
             )
 
